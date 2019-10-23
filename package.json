@@ -1,0 +1,40 @@
+{
+  "name": "js-iot-api",
+  "description": "IOT data sever module: sensors management and data api",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node -r esm server.js",
+    "startdbg": "node -r esm --inspect server.js",
+    "test": "mocha -r esm './test/main.js'",
+    "testbrk": "mocha -r esm --inspect-brk './test/main.js'"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Vaclav Klecanda <vencax77@gmail.com>"
+  },
+  "license": "BSD",
+  "engines": {
+    "node": ">=12.x",
+    "npm": ">=6.x"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.7.1",
+    "dotenv": "^4.0.0",
+    "esm": "^3.0.84",
+    "express": "^4.11.1",
+    "jsonwebtoken": "^8.4.0",
+    "knex": "^0.19.5",
+    "pg": "^4.5.7",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "expect": "^1.20.2",
+    "jsdom": "^9.8.0",
+    "mocha": "^5.2.0",
+    "sqlite3": "^4.1.0"
+  },
+  "private": "false"
+}
