@@ -2,13 +2,11 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
 import cors from 'cors'
-import bodyParser from 'body-parser'
 
 import InitApp from './index'
 import {
   generalErrorHlr, authErrorHlr, notFoundErrorHlr
 } from './error_handlers'
-import { authMW } from './auth'
 const initDB = require('./db')
 const port = process.env.PORT
 
@@ -16,7 +14,7 @@ function initExpressApp (knex) {
   const app = express()
   app.use(cors())
 
-  InitApp(app, express, knex, authMW, bodyParser.json())
+  InitApp(app, express, knex)
 
   // ERROR HANDLING ------------------------------------------------------------
   app.use(notFoundErrorHlr, authErrorHlr, generalErrorHlr)
