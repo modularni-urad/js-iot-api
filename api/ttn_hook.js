@@ -5,6 +5,7 @@ require('dotenv').config()
 let APPS = []
 try {
   APPS = JSON.parse(process.env.TTN_APPS)
+  console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
 } catch (e) {
   console.error('!!! env.TTN_APPS must be set to JSON array !!!')
   throw e
@@ -34,7 +35,8 @@ export function InitTTNHooks (knex) {
         })
       })
       .catch(error => {
-        console.error('Error', error)
+        console.error(`Connecting to app: ${app[0]} failed!`)
+        console.error(error)
         process.exit(1)
       })
   })
