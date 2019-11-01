@@ -1,13 +1,13 @@
 
-import { InitDataApp } from './api/data'
+import { InitDataApp } from './api'
 import { InitTTNHooks } from './api/ttn_hook'
 
-export default function InitApp (app, express, knex) {
+export default function InitApp (app, express, JSONBodyParser, knex) {
   //
-  InitTTNHooks(knex)
+  process.env.TTN_APPS && InitTTNHooks(knex)
 
   const dataApp = express()
-  InitDataApp(dataApp, knex)
+  InitDataApp(dataApp, JSONBodyParser, knex)
   app.use('/data', dataApp)
 
   // TODO: prepsat s vyuzitim TTN api - tam jsou ulozena vsechna data o clients

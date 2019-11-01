@@ -1,17 +1,19 @@
-// import _ from 'underscore'
+import _ from 'underscore'
 
 export function find (cond, knex) {
   return knex('envirodata').where(cond)
 }
 
-export function InitDataApp (app, knex) {
-  //
-  app.get('/', (req, res, next) => {
-    find(req.query, knex)
-      .then(results => {
-        res.json(results)
-        next()
-      })
-      .catch(next)
+export function create (body, knex) {
+  const typPromises = _.map(body.payload_fields, (v, k) => {
+    const data = {
+      typ: k,
+      value: v,
+      dev_id: body.dev_id,
+      app_id: body.app_id,
+      counter: body.counter
+    }
+    return knex('envirodata').insert(data).catch(err => console.error(err))
   })
+  return Promise.all(typPromises)
 }
