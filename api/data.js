@@ -4,14 +4,15 @@ export function find (cond, knex) {
   return knex('envirodata').where(cond)
 }
 
-export function create (body, knex) {
+// NOT used now
+export function create (body, time, knex) {
   const typPromises = _.map(body.payload_fields, (v, k) => {
     const data = {
       typ: k,
       value: v,
       dev_id: body.dev_id,
       app_id: body.app_id,
-      counter: body.counter
+      time
     }
     return knex('envirodata').insert(data).catch(err => console.error(err))
   })

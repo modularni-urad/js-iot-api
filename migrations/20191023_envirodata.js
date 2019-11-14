@@ -3,10 +3,9 @@ exports.up = (knex, Promise) => {
     table.string('app_id').notNullable()
     table.string('dev_id').notNullable()
     table.string('typ', 4).notNullable()
-    table.integer('counter').notNullable()
     table.float('value').notNullable()
-    table.timestamp('created').notNullable().defaultTo(knex.fn.now())
-    table.primary(['app_id', 'dev_id', 'typ', 'counter'])
+    table.timestamp('time').notNullable().defaultTo(knex.fn.now())
+    table.primary(['app_id', 'dev_id', 'typ', 'time'])
   })
 }
 

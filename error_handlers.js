@@ -1,3 +1,6 @@
+export function InitErrorHandlers (app) {
+  app.use(notFoundErrorHlr, authErrorHlr, generalErrorHlr)
+}
 
 export function generalErrorHlr (err, req, res, next) {
   res.status(err.status || 400).send(err.message || err)

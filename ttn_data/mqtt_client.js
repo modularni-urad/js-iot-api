@@ -4,7 +4,8 @@ const ttn = require('ttn')
 require('dotenv').config()
 
 // https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html
-export function InitTTNHooks (knex) {
+// OBSOLETE for now
+export function InitMQTTClient (knex) {
   try {
     const APPS = JSON.parse(process.env.TTN_APPS)
     console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
@@ -12,7 +13,7 @@ export function InitTTNHooks (knex) {
       ttn.data(app[0], app[1])
         .then(client => {
           client.on('uplink', (devID, payload) => {
-            create(payload, knex)
+            create(payload, payload.metadata.time, knex)
           })
         })
         .catch(error => {

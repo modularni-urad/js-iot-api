@@ -1,11 +1,7 @@
-
 import { InitDataApp } from './api'
-import { InitTTNHooks } from './api/ttn_hook'
 
 export default function InitApp (app, express, JSONBodyParser, knex) {
   //
-  process.env.TTN_APPS && InitTTNHooks(knex)
-
   const dataApp = express()
   InitDataApp(dataApp, JSONBodyParser, knex)
   app.use('/data', dataApp)
