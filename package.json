@@ -25,6 +25,7 @@
     "esm": "^3.0.84",
     "express": "^4.11.1",
     "knex": "^0.19.5",
+    "knex-filter-loopback": "github:joostvunderink/knex-filter-loopback",
     "pg": "^4.5.7",
     "ttn": "^2.3.3",
     "underscore": "^1.8.3"
