@@ -1,13 +1,27 @@
-import { InitDataApp } from './api'
+import { InitDataApp, InitDevicesApp } from './api'
+import { InitStorageIntegration } from './ttn_data/storage_integration'
 
 export default function InitApp (app, express, JSONBodyParser, knex) {
   //
+  const TTNApps = _getApps()
+  InitStorageIntegration(knex, TTNApps) // ttn data downloader
+
   const dataApp = express()
   InitDataApp(dataApp, JSONBodyParser, knex)
   app.use('/data', dataApp)
 
-  // TODO: prepsat s vyuzitim TTN api - tam jsou ulozena vsechna data o clients
-  // const sensorApp = express()
-  // InitSensorsApp(sensorApp, knex, authMW, JSONBodyParser)
-  // app.use('/sensors', sensorApp)
+  const sensorApp = express()
+  InitDevicesApp(sensorApp, TTNApps)
+  app.use('/devices', sensorApp)
+}
+
+function _getApps () {
+  try {
+    const APPS = JSON.parse(process.env.TTN_APPS)
+    console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
+    return APPS
+  } catch (e) {
+    console.error('!!! env.TTN_APPS must be set to JSON array !!!')
+    throw e
+  }
 }

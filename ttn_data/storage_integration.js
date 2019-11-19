@@ -5,21 +5,14 @@ const MIN = 60 * 1000
 const INTERVAL = 1
 
 // https://www.thethingsnetwork.org/docs/applications/storage/api.html
-export function InitStorageIntegration (knex) {
-  try {
-    const APPS = JSON.parse(process.env.TTN_APPS)
-    console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
-    _.map(APPS, app => {
-      _loadAppData(app[0], app[1], '7d', knex) // load all data @ the beginning
-      setInterval(() => {
-        // load each hour the diff
-        _loadAppData(app[0], app[1], `${INTERVAL + 1}m`, knex)
-      }, INTERVAL * MIN)
-    })
-  } catch (e) {
-    console.error('!!! env.TTN_APPS must be set to JSON array !!!')
-    throw e
-  }
+export function InitStorageIntegration (knex, apps) {
+  _.map(apps, app => {
+    _loadAppData(app[0], app[1], '7d', knex) // load all data @ the beginning
+    setInterval(() => {
+      // load each hour the diff
+      _loadAppData(app[0], app[1], `${INTERVAL + 1}m`, knex)
+    }, INTERVAL * MIN)
+  })
 }
 
 function _loadAppData (app, key, last, knex) {
