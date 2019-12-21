@@ -1,15 +1,17 @@
 import axios from 'axios'
 import _ from 'underscore'
+require('dotenv').config()
 
 const MIN = 60 * 1000
 const INTERVAL = 1
+const DATA_HOOK_URL = process.env.DATA_HOOK_URL
 
 // https://www.thethingsnetwork.org/docs/applications/storage/api.html
 export function InitStorageIntegration (knex, apps) {
   _.map(apps, app => {
     _loadAppData(app[0], app[1], '7d', knex) // load all data @ the beginning
     setInterval(() => {
-      // load each hour the diff
+      // load each minute the diff
       _loadAppData(app[0], app[1], `${INTERVAL + 1}m`, knex)
     }, INTERVAL * MIN)
   })
@@ -31,9 +33,14 @@ function _loadAppData (app, key, last, knex) {
       knex('envirodata').where(_.omit(data, 'value')).select('value')
         .then(found => {
           // in case no existing, insert ..
-          found.length === 0 && knex('envirodata').insert(data).catch(err => {
-            console.error(err)
-          })
+          found.length === 0 && knex('envirodata').insert(data)
+            .then(() => {
+              // send new data integration request
+              return axios.put(DATA_HOOK_URL, data)
+            })
+            .catch(err => {
+              console.error(err)
+            })
         })
     })
   }

@@ -17,5 +17,6 @@ FW issues detected so moved to storage integration.
 ```
 TTN_APPS=[["app1","ttn-account-v2.sdkfwokjfdsojfowwkjfwof"]]
 ```
+- env.DATA_HOOK_URL: url that PUT request on a new data is send to
 - env.DATABASE_URL: connection string (currently to postgre db)
 - env.PORT: port to bind to
