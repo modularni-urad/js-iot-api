@@ -15,7 +15,7 @@ async function init (host, port) {
 
   app.listen(port, host, (err) => {
     if (err) { throw err }
-    console.log(`ents do magic on ${port}`)
+    console.log(`ents do magic on ${host}:${port}`)
   })
 }
 

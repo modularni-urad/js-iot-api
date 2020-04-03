@@ -1,5 +1,5 @@
 import { find } from './data'
-import { deviceManager } from './devices'
+import { findDevices } from './devices'
 
 export function InitDataApp (app, JSONBodyParser, knex) {
   //
@@ -15,10 +15,8 @@ export function InitDataApp (app, JSONBodyParser, knex) {
 
 export function InitDevicesApp (app, ttnApps) {
   //
-  const manager = deviceManager(ttnApps)
-
   app.get('/', (req, res, next) => {
-    manager.list(req.query.app)
+    findDevices(req.query)
       .then(results => {
         res.json(results)
         next()

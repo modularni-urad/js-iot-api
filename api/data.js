@@ -21,13 +21,12 @@ export function find (cond, knex) {
   return q.where(whereFilter(filter))
 }
 
-export function create (body, time, knex) {
-  const data = _.map(body.payload_fields, (v, k) => {
+export function create (devid, payload_fields, time, knex) {
+  const data = _.map(payload_fields, (v, k) => {
     return {
       typ: k,
       value: v,
-      dev_id: body.dev_id,
-      app_id: body.app_id,
+      devid,
       time
     }
   })

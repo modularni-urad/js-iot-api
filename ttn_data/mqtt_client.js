@@ -1,5 +1,6 @@
 import _ from 'underscore'
 import { create } from '../api/data'
+import { createDevice } from '../api/devices'
 const ttn = require('ttn')
 
 // https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html
@@ -10,10 +11,18 @@ export default function InitMQTTClient (knex, APPS) {
       .then(client => {
         client.on('uplink', async (devID, payload) => {
           try {
-            await create(payload, payload.metadata.time, knex)
+            const appId = payload.app_id
+            const existingDev = await knex('devices').where({
+              dev_id: devID,
+              app_id: appId
+            }).first('id')
+            const devid = existingDev
+              ? existingDev.id
+              : await createDevice(appId, devID, knex, APPS)
+            const time = payload.metadata.time
+            await create(devid, payload.payload_fields, time, knex)
             await knex('metadata').insert({
-              app_id: payload.app_id,
-              dev_id: payload.dev_id,
+              devid,
               time: payload.metadata.time,
               metadata: JSON.stringify(payload.metadata)
             })
