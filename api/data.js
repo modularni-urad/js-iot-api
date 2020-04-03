@@ -21,14 +21,9 @@ export function find (cond, knex) {
   return q.where(whereFilter(filter))
 }
 
-export function create (devid, payload_fields, time, knex) {
-  const data = _.map(payload_fields, (v, k) => {
-    return {
-      typ: k,
-      value: v,
-      devid,
-      time
-    }
+export function create (devid, payloadFields, time, knex) {
+  const data = _.map(payloadFields, (v, k) => {
+    return { typ: k, value: v, devid, time }
   })
   return knex('envirodata').insert(data)
 }
