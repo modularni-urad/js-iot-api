@@ -7,7 +7,7 @@ exports.up = (knex, Promise) => {
     table.float('latitude').notNullable()
     table.float('longitude').notNullable()
     table.float('altitude').notNullable()
-    table.string('description')
+    table.text('description')
     table.timestamp('created').notNullable().defaultTo(knex.fn.now())
   })
 }
