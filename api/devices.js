@@ -3,11 +3,12 @@ import _ from 'underscore'
 import { whereFilter } from 'knex-filter-loopback'
 
 export function findDevices (cond, knex) {
-  const filter = JSON.parse(cond.filter)
-  if (!_.isObject(filter) || _.isEmpty(filter)) {
-    throw new Error('insufficient conditions')
+  try {
+    const filter = JSON.parse(cond.filter)
+    return knex('devices').where(whereFilter(filter))
+  } catch {
+    throw new Error('wrong filter')
   }
-  return knex('devices').where(whereFilter(filter))
 }
 
 function getDeviceInfo (appId, devId, TTNApps) {

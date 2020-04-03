@@ -10,7 +10,7 @@ async function init (host, port) {
   const knex = await initDB()
   const app = express()
   app.use(cors())
-  InitApp(app, express, bodyParser.json(), knex)
+  InitApp(app, bodyParser.json(), knex)
   InitErrorHandlers(app) // ERROR HANDLING
 
   app.listen(port, host, (err) => {

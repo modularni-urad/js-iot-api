@@ -1,18 +1,26 @@
-import { InitDataApp, InitDevicesApp } from './api'
+import { find } from './api/data'
+import { findDevices } from './api/devices'
 import TTNClient from './ttn_data/mqtt_client'
+const TTNApps = _getApps()
 
-export default function InitApp (app, express, JSONBodyParser, knex) {
-  //
-  const TTNApps = _getApps()
+export default function InitApp (app, JSONBodyParser, knex) {
   TTNClient(knex, TTNApps)
 
-  const dataApp = express()
-  InitDataApp(dataApp, JSONBodyParser, knex)
-  app.use('/data', dataApp)
+  app.get('/data', async (req, res, next) => {
+    try {
+      res.json(await find(req.query, knex))
+    } catch (err) {
+      next(err)
+    }
+  })
 
-  const sensorApp = express()
-  InitDevicesApp(sensorApp, TTNApps)
-  app.use('/devices', sensorApp)
+  app.get('/devices', async (req, res, next) => {
+    try {
+      res.json(await findDevices(req.query, knex))
+    } catch (err) {
+      next(err)
+    }
+  })
 }
 
 function _getApps () {
