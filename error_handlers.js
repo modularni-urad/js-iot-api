@@ -1,4 +1,4 @@
-export function InitErrorHandlers (app) {
+export default function InitErrorHandlers (app) {
   app.use(notFoundErrorHlr, authErrorHlr, generalErrorHlr)
 }
 

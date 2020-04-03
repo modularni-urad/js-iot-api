@@ -1,10 +1,10 @@
 import { InitDataApp, InitDevicesApp } from './api'
-import { InitStorageIntegration } from './ttn_data/storage_integration'
+import TTNClient from './ttn_data/mqtt_client'
 
 export default function InitApp (app, express, JSONBodyParser, knex) {
   //
   const TTNApps = _getApps()
-  InitStorageIntegration(knex, TTNApps) // ttn data downloader
+  TTNClient(knex, TTNApps)
 
   const dataApp = express()
   InitDataApp(dataApp, JSONBodyParser, knex)
@@ -18,10 +18,12 @@ export default function InitApp (app, express, JSONBodyParser, knex) {
 function _getApps () {
   try {
     const APPS = JSON.parse(process.env.TTN_APPS)
-    console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
     return APPS
   } catch (e) {
     console.error('!!! env.TTN_APPS must be set to JSON array !!!')
     throw e
   }
 }
+
+// zdejsi 41528
+// remote mqtt: 1883
