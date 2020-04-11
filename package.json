@@ -1,7 +1,7 @@
 {
   "name": "js-iot-api",
   "description": "IOT data sever module: sensors management and data api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "start": "node -r esm -r dotenv/config server.js",
     "startdbg": "node -r esm -r dotenv/config --inspect-brk server.js",
@@ -25,7 +25,7 @@
     "esm": "^3.0.84",
     "express": "^4.11.1",
     "knex": "^0.19.5",
-    "knex-filter-loopback": "github:joostvunderink/knex-filter-loopback",
+    "knex-filter-loopback": "^0.3.0",
     "pg": "^4.5.7",
     "ttn": "^2.3.3",
     "underscore": "^1.8.3"
