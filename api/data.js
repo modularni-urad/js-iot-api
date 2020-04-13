@@ -1,4 +1,5 @@
 import _ from 'underscore'
+import axios from 'axios'
 import { whereFilter } from 'knex-filter-loopback'
 
 function _getFilter (filter) {
@@ -26,4 +27,11 @@ export function create (devid, payloadFields, time, knex) {
     return { typ: k, value: v, devid, time }
   })
   return knex('envirodata').insert(data)
+    .then(() => {
+      // send new data integration request
+      axios.put(process.env.DATA_HOOK_URL, data, { timeout: 1000 })
+        .catch(err => {
+          process.env.NODE_ENV !== 'production' && console.error(err.toString())
+        })
+    })
 }
