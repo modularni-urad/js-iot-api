@@ -1,6 +1,6 @@
 import _ from 'underscore'
-import { create } from '../api/data'
-import { createDevice } from '../api/devices'
+import { create } from './api/data'
+import { createDevice } from './api/devices'
 const ttn = require('ttn')
 
 // https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html

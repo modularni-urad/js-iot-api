@@ -1,6 +1,6 @@
 import { find } from './api/data'
 import { findDevices } from './api/devices'
-import TTNClient from './ttn_data/mqtt_client'
+import TTNClient from './mqtt_client'
 const TTNApps = _getApps()
 
 export default function InitApp (app, JSONBodyParser, knex) {
