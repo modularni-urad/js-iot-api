@@ -1,0 +1,41 @@
+@startuml
+
+title js-iot-api - Component Diagram
+
+actor Admin
+actor "Data Consumer" as dataconsumer
+
+node "TTN" {
+    [MQTT Router] as Router
+    [Applications / devices] as TTNApps
+}
+
+node "IOT Server" {
+    node "IOT Docker container" {
+        [MQTT client] as MQTTClient
+        [API] as api
+    }
+    node "PostgreSQL Docker container" {
+        database "PostgreSQL" {
+            [envirodata]
+            [devices]
+            [metadata]
+        }
+    }
+}
+
+node "3rd party" {
+    [logic] as 3rdParty
+}
+
+Admin -left-> TTNApps: TTN config. console web app
+api -left-> dataconsumer: query
+MQTTClient -up-> Router: port 1883
+MQTTClient -> 3rdParty: PUT request to process.env.DATA_HOOK_URL
+MQTTClient -down-> envirodata
+MQTTClient -down-> devices
+MQTTClient -down-> metadata
+api <- envirodata
+api <- devices
+
+@enduml

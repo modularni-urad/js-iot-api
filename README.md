@@ -3,6 +3,8 @@
 IOT data sever connected to TTN infrastructure serving data via http api.
 Written in javascript => require [node.js and npm](https://nodejs.org/en/) to run.
 
+![Schema](https://www.plantuml.com/plantuml/svg/VLFBRi8m4BpxArRSGrLnGQX2HEHGL5fUwQb2o2GcSflOhks0KCM_T-qa996gvfBrpknhrfuPIxKjYvmGostEuDC4NDg0AWu1p6MXf632GiHffcb124sir12c1HUrFOYefKWLfYoO7W0raA8dgHq4Y90fWq4SlmtWXm1-7w-RE8QjB2tJUnTGcHKMAfNpX5gE2U01KdRc2JEUXYaGDUH6wfoBLGmxfi-kRfMwzKSo-M8Qi0zBkMWPRGD9pd4sdzcTv_xOSiBrmcEeXNVUEWNMqjXCizrc-MyT9yIHcbv05_Trc3XpBHrrtmUQqVlUWbdQ9z_gzkwoZ7GA2lTwlGkUoumdVXh4rWvoRBz6279sii6qKNVY33VEYMT3zpSIxyM57L48HVp5g0EwQvx0TydqbRH2Gb0g95MhdO2IsiBZU3pgKQRtVf2X9KvhXgZ7C0hZyF2yMhqSthVBNaGgBmB3Mj7-Gclb_e8Q-VmaJq4tKUrfWicCYHIVnYy0)
+
 ## settings
 
 Is done via following environment variables:
@@ -14,7 +16,6 @@ TTN_APPS=[["app1","ttn-account-v2.sdkfwokjfdsojfowwkjfwof"]]
 - DATA_HOOK_URL: url that PUT request on a new data is send to
 - DATABASE_URL: connection string (currently to postgre db)
 - PORT: port to bind to
-
 
 ## test
 
@@ -34,7 +35,7 @@ npm start
 
 ### Production deploy
 
-Docker.io instance can be recomended for [Production deploy](https://github.com/modularni-urad/docker-settings).
+For production deploy use [Dockerfile](./Dockerfile).
 
 ## usage
 
@@ -68,7 +69,6 @@ the data are stored in TTN storage __only for 7days__ -> regular download is per
 It needs to add another POST route to API and let TTN call this endpoint.
 FW issues detected so moved to storage integration.
 
-
 ## DB
 
 [DB model](./migrations/) is as simple as possible.
@@ -85,4 +85,4 @@ The [data DB schema](./migrations/20191023_envirodata.js) is following:
 Each message of each device can be split into particular values of different type with [Payload Format](https://www.youtube.com/watch?v=nT2FnwCoP7w).
 Each device type must provide format of payload in documentation.
 
-There is another dable storing [metadata with LoRa network state](./migrations/20200402_metadata.js).
+There is another table storing [metadata with LoRa network state](./migrations/20200402_metadata.js).
