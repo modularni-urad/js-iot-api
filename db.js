@@ -4,7 +4,8 @@ const DB_URL = process.env.DATABASE_URL
 
 const commonOpts = {
   migrations: {
-    directory: path.join(__dirname, 'migrations')
+    directory: path.join(__dirname, 'migrations'),
+    disableMigrationsListValidation: true
   }
 }
 const debugOpts = () => ({
