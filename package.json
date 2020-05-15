@@ -18,25 +18,25 @@
     "npm": ">=6.x"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cors": "^2.7.1",
     "dotenv": "^4.0.0",
-    "esm": "^3.0.84",
-    "express": "^4.11.1",
-    "knex": "^0.19.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
     "knex-filter-loopback": "^0.3.0",
-    "pg": "^4.5.7",
+    "pg": "^8.2.0",
     "ttn": "^2.3.3",
-    "underscore": "^1.8.3"
+    "underscore": "^1.10.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "chai-http": "^4.2.0",
+    "chai-http": "^4.3.0",
     "expect": "^1.20.2",
     "jsdom": "^9.8.0",
-    "mocha": "^5.2.0",
-    "sqlite3": "^4.1.0"
+    "mocha": "^7.1.2",
+    "sqlite3": "^4.2.0"
   },
   "private": "false"
 }
