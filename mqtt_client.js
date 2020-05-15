@@ -26,9 +26,9 @@ export function appStart (app, knex) {
     data.time = payload.metadata.time
 
     // send data integration request
-    axios.put(app.endpoint, data, { timeout: 2000 })
+    axios.post(app.endpoint, data, { timeout: 2000 })
       .catch(err => {
-        return _setError(`INTEGRATION: ${err.toString()}`)
+        return _setError(`INTEGRATION: ${app.endpoint}, ${err.toString()}`)
       })
 
     const metadata = _.pick(payload, ['app_id', 'dev_id'])
