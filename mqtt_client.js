@@ -1,40 +1,49 @@
+import axios from 'axios'
 import _ from 'underscore'
-import { create } from './api/data'
-import { createDevice } from './api/devices'
+import { TNAMES } from './consts'
 const ttn = require('ttn')
+const activeApps = {}
+
+export function appStop (appId) {
+  if (appId in activeApps) {
+    console.log(`disconnecting ${appId}`)
+    activeApps[appId].close()
+    delete activeApps[appId]
+  }
+}
 
 // https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html
-export default function InitMQTTClient (knex, APPS) {
-  console.log(`connecting to ${JSON.stringify(APPS, null, 2)}`)
-  _.map(APPS, app => {
-    ttn.data(app[0], app[1])
-      .then(client => {
-        client.on('uplink', async (devID, payload) => {
-          try {
-            const appId = payload.app_id
-            const existingDev = await knex('devices').where({
-              dev_id: devID,
-              app_id: appId
-            }).first('id')
-            const devid = existingDev
-              ? existingDev.id
-              : await createDevice(appId, devID, knex, APPS)
-            const time = payload.metadata.time
-            await create(devid, payload.payload_fields, time, knex)
-            await knex('metadata').insert({
-              devid,
-              time: payload.metadata.time,
-              metadata: JSON.stringify(payload.metadata)
-            })
-          } catch (err) {
-            console.error(err)
-          }
-        })
+export function appStart (app, knex) {
+  console.log(`connecting to ${app.app_id}`)
+
+  function _setError (error) {
+    return knex(TNAMES.APPS).where({ app_id: app.app_id }).update({ error })
+      .catch(console.error)
+  }
+
+  function onUplink (devID, payload) {
+    const data = _.pick(payload, ['app_id', 'dev_id', 'payload_fields'])
+    data.time = payload.metadata.time
+
+    // send data integration request
+    axios.put(app.endpoint, data, { timeout: 2000 })
+      .catch(err => {
+        return _setError(`INTEGRATION: ${err.toString()}`)
       })
-      .catch(error => {
-        console.error(`Connecting to app: ${app[0]} failed!`)
-        console.error(error)
-        process.exit(1)
-      })
-  })
+
+    const metadata = _.pick(payload, ['app_id', 'dev_id'])
+    metadata.time = payload.metadata.time
+    metadata.metadata = JSON.stringify(_.omit(payload.metadata, 'time'))
+    knex('metadata').insert(metadata).catch(console.error)
+  }
+
+  ttn.data(app.app_id, app.app_secret)
+    .then(client => {
+      client.on('uplink', onUplink)
+      activeApps[app.app_id] = client
+      return _setError(null)
+    })
+    .catch(err => {
+      _setError(`TTN: ${err.toString()}`)
+    })
 }

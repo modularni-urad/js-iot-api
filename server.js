@@ -21,7 +21,7 @@ async function init (host, port) {
 
 try {
   const host = process.env.HOST || '127.0.0.1'
-  const port = process.env.PORT
+  const port = process.env.PORT || 3000
   init(host, port)
 } catch (err) {
   console.error(err)

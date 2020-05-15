@@ -30,9 +30,6 @@ const knex = Knex(opts)
 module.exports = () => {
   return knex.migrate.latest()
     .then(() => {
-      return process.env.RUN_SEEDS ? knex.seed.run(opts) : null
-    })
-    .then(() => {
       return knex
     })
 }

@@ -3,7 +3,7 @@
 title js-iot-api - Component Diagram
 
 actor Admin
-actor "Data Consumer" as dataconsumer
+actor "Network admin" as netAdmin
 
 node "TTN" {
     [MQTT Router] as Router
@@ -12,30 +12,28 @@ node "TTN" {
 
 node "IOT Server" {
     node "IOT Docker container" {
+        [metadata/app settings API] as api
         [MQTT client] as MQTTClient
-        [API] as api
     }
     node "PostgreSQL Docker container" {
         database "PostgreSQL" {
-            [envirodata]
-            [devices]
+            [apps]
             [metadata]
         }
     }
 }
 
-node "3rd party" {
-    [logic] as 3rdParty
+node "3rd party apps" {
+    [data logic] as 3rdParty
 }
 
 Admin -left-> TTNApps: TTN config. console web app
-api -left-> dataconsumer: query
+api -left-> netAdmin: analyze signal strength, setup apps
 MQTTClient -up-> Router: port 1883
-MQTTClient -> 3rdParty: PUT request to process.env.DATA_HOOK_URL
-MQTTClient -down-> envirodata
-MQTTClient -down-> devices
+MQTTClient -> 3rdParty: integration PUT request to 3rd party apps
 MQTTClient -down-> metadata
-api <- envirodata
-api <- devices
+metadata -up-> api
+apps -up-> api
+apps -up-> MQTTClient: app\nsettings
 
 @enduml
