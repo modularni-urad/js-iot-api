@@ -26,30 +26,23 @@ export default function InitApp (app, JSONBodyParser, knex) {
     }
   })
 
-  app.post('/app', async (req, res, next) => {
+  app.post('/app', JSONBodyParser, async (req, res, next) => {
     try {
-      const app = await apps.create(req.body, knex)
-      await appStart(app)
+      const created = await apps.create(req.body, knex)
+      const app = Object.assign({ created }, req.body)
+      await appStart(app, knex)
       res.json(app)
     } catch (err) {
       next(err)
     }
   })
 
-  app.put('/app/:id', async (req, res, next) => {
+  app.put('/app/:id', JSONBodyParser, async (req, res, next) => {
     try {
       appStop(req.params.id)
-      const app = await apps.update(req.params.id, req.body, knex)
-      await appStart(app)
-      res.json(app)
-    } catch (err) {
-      next(err)
-    }
-  })
-
-  app.post('/restart/:id', async (req, res, next) => {
-    try {
-      await appStart(app)
+      await apps.update(req.params.id, req.body, knex)
+      const app = await apps.get(req.body.app_id || req.params.id, knex)
+      await appStart(app, knex)
       res.json(app)
     } catch (err) {
       next(err)

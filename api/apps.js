@@ -21,16 +21,20 @@ function find (cond, knex) {
   return q.where(whereFilter(filter))
 }
 
+function get (appId, knex) {
+  return knex(TNAMES.APPS).where({ app_id: appId }).first()
+}
+
 function create (data, knex) {
-  return knex(TNAMES.APPS).insert(data)
+  return knex(TNAMES.APPS).returning('created').insert(data)
 }
 
 function update (appId, data, knex) {
-  return knex(TNAMES.APPS).update(data)
+  return knex(TNAMES.APPS).where({ app_id: appId }).update(data)
 }
 
-function destroy () {
-
+function destroy (appId, knex) {
+  return knex(TNAMES.APPS).where({ app_id: appId }).del()
 }
 
-export default { find, create, update, destroy }
+export default { find, get, create, update, destroy }
